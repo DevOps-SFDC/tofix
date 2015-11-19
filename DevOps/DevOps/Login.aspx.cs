@@ -205,31 +205,31 @@ namespace DevOps
         //[System.Web.Services.WebMethodAttribute(), System.Web.Script.Services.ScriptMethodAttribute()]
         //public static string userLogin(List<string> _arr)
         //{
-        //    DataTable dummy = new DataTable();
+        //    SBObj _sbobj = new SBObj();
 
-        //    SystemObjects.SBObj _sbobj = new SystemObjects.SBObj();
         //    _sbobj.EID = _arr[0].ToString();
-        //    DataSet ds = new DataSet();
-        //    try
-        //    {
-        //        dummy.Merge(_sbobj.UserLogin());
-        //        ds.Tables.Add(dummy);
-        //    }
-        //    catch (Exception ex)
-        //    {
 
-        //    }
-        //    return ds.GetXml();
+        //    return _sbobj.UserLogin();
         //}
 
         [System.Web.Services.WebMethodAttribute(), System.Web.Script.Services.ScriptMethodAttribute()]
         public static string userLogin(List<string> _arr)
         {
-            SBObj _sbobj = new SBObj();
+            DataTable dummy = new DataTable();
 
+            SystemObjects.SBObj _sbobj = new SystemObjects.SBObj();
             _sbobj.EID = _arr[0].ToString();
+            DataSet ds = new DataSet();
+            try
+            {
+                dummy.Merge(_sbobj.UserLogin());
+                ds.Tables.Add(dummy);
+            }
+            catch (Exception ex)
+            {
 
-            return _sbobj.UserLogin();
+            }
+            return ds.GetXml();
         }
 
     }

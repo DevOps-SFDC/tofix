@@ -254,7 +254,7 @@
                 alert('You are not Authorized to use this Tool!..');
                 window.location.href = "/Login.aspx";
             }
-            else if ('<%: Session["lanid"]%>' == '') {
+            else if ('<%= Session["lanid"]%>' == '') {
                 alert('You are not Authorized to use this Tool!..');
                 window.location.href = "/Login.aspx";
             }

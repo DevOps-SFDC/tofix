@@ -4,6 +4,13 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
+
+    <%-- Site Master Ref --%>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
     <link rel="shortcut icon" href="Images/BOB.png" type="image/png" />
     <title>DevOps Battle of the Brains</title>
     <!-- Bootstrap Core CSS -->
@@ -11,6 +18,9 @@
 
     <!-- MetisMenu CSS -->
     <link href="~/bootstrap/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet" />
+
+    <!-- dataTables CSS -->
+    <link href="~/bootstrap/css/plugins/dataTables.bootstrap.css" rel="stylesheet" />
 
     <!-- Timeline CSS -->
     <link href="~/bootstrap/css/plugins/timeline.css" rel="stylesheet" />
@@ -139,6 +149,8 @@
     <link href="~/bootstrap/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet" />
 </head>
 <script src="http://mymaplist.com/js/vendor/TweenLite.min.js"></script>
+<script src="<%: ResolveUrl("~/bootstrap/js/plugins/dataTables/jquery.dataTables.js") %>"></script>
+<script src="<%: ResolveUrl("~/bootstrap/js/plugins/dataTables/dataTables.bootstrap.js") %>"></script>
 <body>
     
     <!-- Container -->
@@ -240,7 +252,7 @@
 
     <script src="Scripts/jquery-1.8.2.min.js" type="text/javascript"></script>
     <script type="text/javascript">
-
+        var ans;
 
         $(document).ready(function () {
 
@@ -333,73 +345,59 @@
                 $('#txtusername').focus();
             }
             else {
-                UserLogin($('#txtusername').val());
+                ans = $('#txtusername').val();
+                UserLogin();
             }
         }
 
+
         function UserLogin() {
-            var arr = new Array();
+            var arr = new Array();            
             arr[0] = $('#txtusername').val();
+
             $.ajax({
                 type: "POST",
                 url: "Login.aspx/userLogin",
                 data: JSON.stringify({ _arr: arr }),
                 contentType: "application/json; charset=utf-8",
-                dataTaype: "json",
-                success: AjaxSucceeded,
-                error: AjaxError,
-                failure: AjaxFailure
-            });
+                dataType: "json",
+                success: function AjaxSucceded(response) {
+                    var xmlDoc = $.parseXML(response.d);
+                    var xml = $(xmlDoc);
+                    var details = xml.find("Table1");
+                    $.each(details, function () {
+                        var metrics = $(this);
+                        //alert($(this).find("Answer").text());
+                        if (ans == $(this).find("EID").text()) {
+                            if ($(this).find("Type").text() == 'Administrator') {
+                                '<% Session["Type"] = "Administrator"; %>';
+                                <%Session["lanid"] = "'+ ans +'";%>
+                                var sessionlanid = '<%=Session["lanid"]%>';
 
-            function AjaxSucceeded(response) {
-                //SUCESS SUCCESS
-                alert(response);
+                                window.location.href = "/Default.aspx";
+                            }
+                            else {
+                                '<% Session["lanid"] = "'+ ans +'"; %>';
+                                '<% Session["Type"] = "User"; %>';
+                                window.location.href = "/Default.aspx";
+                            }
 
-            }
-            function AjaxError(response) {
-                //alert(response.status + ' ' + response.statusText);
-            }
-            function AjaxFailure(response) {
-                //alert(response.status + ' ' + response.statusText);
-            }
+                            
+                            
+
+                        }
+                        else {
+                            alert('You are not yet Registered');
+                            $('#txtusername').focus();
+                        }
+                    });
+
+                },
+                error: function AjaxError(response) { alert(response.status + ' ' + response.responseText); },
+                failure: function AjaxFailure(response) { response.status + ' ' + response.statusText; }
+            })
         }
 
-
-<%--        function UserLogin() {
-            alert('1');
-            var arr = new Array();
-            arr[0] = $('#txtusername').val();
-            arr[1] = ans;
-            arr[2] = '<%: Session["lanid"] %>';
-               arr[3] = $('#timer').text();
-
-               $.ajax({
-                   type: "POST",
-                   url: "Login.aspx/userLogin",
-                   data: JSON.stringify({ _arr: arr }),
-                   contentType: "application/json; charset=utf-8",
-                   dataType: "json",
-                   success: function AjaxSucceded(response) {
-                       var xmlDoc = $.parseXML(response.d);
-                       var xml = $(xmlDoc);
-                       var details = xml.find("Table1");
-                       $.each(details, function () {
-                           var metrics = $(this);
-                           alert($(this).find("EID").text());
-
-                           //if ($(this).find("EID").text() == $('#txtusername').val()) {
-                           //    alert('You are Registered');
-                           //}
-                           //else if ($(this).find("EID").text() == '') {
-                           //    alert('You are not Registered');
-                           //}
-                       });
-
-                   },
-                   error: function AjaxError(response) { alert(response.status + ' ' + response.responseText); },
-                   failure: function AjaxFailure(response) { response.status + ' ' + response.statusText; }
-               })
-           }--%>
 
 
     </script>

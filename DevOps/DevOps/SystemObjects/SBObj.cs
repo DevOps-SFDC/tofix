@@ -216,31 +216,31 @@ namespace DevOps.SystemObjects
         //    return ds = _dbi.FGetDataSet(@"TBGetLoginDetails", oParam);
         //}
 
-        //public DataTable UserLogin()
-        //{
-        //    DataTable dt = new DataTable();
-        //    var oParam = new SqlCommand().Parameters;
-        //    oParam.AddWithValue("@eid", _eid);
-        //    return dt = this.FGetDataTable(@"TBGetLoginDetails", oParam);
-        //}
-
-        public string UserLogin()
+        public DataTable UserLogin()
         {
-            string msg;
+            DataTable dt = new DataTable();
             var oParam = new SqlCommand().Parameters;
             oParam.AddWithValue("@eid", _eid);
-            try
-            {
-                this.ExecuteInsert(@"TBGetLoginDetails", oParam);
-                msg = "Updated!";
-            }
-            catch (Exception ex)
-            {
-                msg = ex.ToString();
-            }
-
-            return msg;
+            return dt = this.FGetDataTable(@"TBGetLoginDetails", oParam);
         }
+
+        //public string UserLogin()
+        //{
+        //    string msg;
+        //    var oParam = new SqlCommand().Parameters;
+        //    oParam.AddWithValue("@eid", _eid);
+        //    try
+        //    {
+        //        this.ExecuteInsert(@"TBGetLoginDetails", oParam);
+        //        msg = "Updated!";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        msg = ex.ToString();
+        //    }
+
+        //    return msg;
+        //}
 
 
 
